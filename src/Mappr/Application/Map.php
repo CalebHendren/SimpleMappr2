@@ -220,7 +220,7 @@ class Map extends Mappr
             $maxinterval = ($this->gridspace) ? $this->gridspace : $maxarcs;
             $maxsubdivide = 2;
 
-            ms_newGridObj($layer);
+            new \gridObj($layer);
             $layer->grid->set("labelformat", $labelformat);
             $layer->grid->set("maxarcs", $maxarcs);
             $layer->grid->set("maxinterval", $maxinterval);
