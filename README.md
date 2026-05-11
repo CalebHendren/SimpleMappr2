@@ -18,7 +18,7 @@ CI runs on GitHub Actions; see [.github/workflows/ci.yml](.github/workflows/ci.y
 1. PHP 8.1+ [with cli, PDO, PDO-MySQL, GD, cURL, mbstring]
 2. Apache 2.4+ [with rewrite] (or any equivalent web server)
 3. MySQL 5.7+ / MariaDB 10.3+
-4. [MapServer 7.x](http://www.mapserver.org/) [with PROJ, GDAL, GEOS, Cairo, PHP MapScript]
+4. [MapServer 8.x](http://www.mapserver.org/) [with PROJ, GDAL, GEOS, Cairo] **plus** the separate [`mapscript-ng` PHP extension](https://mapserver.org/mapscript/php/index.html) (SWIG-generated; not bundled with MapServer core since the 8.0 split)
 5. [Composer](https://getcomposer.org/) 2.x
 
 Configuration Instructions
@@ -73,7 +73,7 @@ Homebrew on macOS
           fribidi \
           composer
 
-3. Build [MapServer](http://mapserver.org/download.html) 7.x with the PHP MapScript option enabled. Refer to upstream build instructions — MapServer 8.x dropped the bundled PHP MapScript extension, so 7.6.x is the recommended target for now. Add `extension=php_mapscript.so` to `php.ini` and restart your web server.
+3. Install [MapServer 8.x](http://mapserver.org/download.html) (`brew install mapserver` or build from source) **and** the `mapscript-ng` PHP extension separately. The extension is built from the `mapscript/php` directory of the MapServer source tree (or via the `php-mapscript-ng` package on Debian/Ubuntu). Once installed, add `extension=mapscript.so` to your `php.ini` and verify with `php -m | grep mapscript`. The legacy `ms_newMapObjFromString()` / `ms_newGridObj()` procedural functions and the `OWSRequestObj` alias from the MapServer 7 binding are gone in mapscript-ng — this codebase targets the SWIG API (`mapObj::fromString()`, `new gridObj($layer)`, `new OWSRequest()`).
 
 Unix-based Server
 ------------------

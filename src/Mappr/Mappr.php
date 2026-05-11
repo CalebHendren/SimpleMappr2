@@ -227,10 +227,12 @@ abstract class Mappr
     public function __construct()
     {
         try {
-            if (!extension_loaded('MapScript')) {
-                throw new \Exception("PHP MapScript extension is not loaded");
+            // mapscript-ng (MapServer 8.x SWIG binding) registers as 'mapscript';
+            // the legacy MapServer 7 PHP MapScript extension registered as 'MapScript'.
+            if (!extension_loaded('mapscript') && !extension_loaded('MapScript')) {
+                throw new \Exception("PHP mapscript extension is not loaded");
             }
-            $this->map_obj = ms_newMapObjFromString("MAP END");
+            $this->map_obj = \mapObj::fromString("MAP END");
             $this->request = (object)array_merge((array)$this->_defaultAttributes(), (array)$this->getRequest());
             $this->image_size = [$this->request->width, $this->request->height];
         } catch (\Exception $e) {
@@ -708,7 +710,7 @@ abstract class Mappr
             $maxinterval = ($this->request->gridspace) ? $this->request->gridspace : $maxarcs;
             $maxsubdivide = 2;
 
-            ms_newGridObj($layer);
+            new \gridObj($layer);
             $layer->grid->set("labelformat", $labelformat);
             $layer->grid->set("maxarcs", $maxarcs);
             $layer->grid->set("maxinterval", $maxinterval);
